@@ -188,7 +188,7 @@
 	throwforce = 0
 	throw_speed = 4
 	force = 0
-	hitsound = 'sound/misc/fart.ogg' //Eh, mind as well.
+	//hitsound = 'sound/misc/fart.ogg' //Since the hippie fart sound isn't in yet.
 	body_parts_covered = HEAD //Just going to leave this.
 	slot_flags = SLOT_HEAD // And this.
 	embed_chance = 0 
