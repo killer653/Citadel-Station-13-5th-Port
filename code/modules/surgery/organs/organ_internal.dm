@@ -176,3 +176,22 @@
 		if(health <= 0)
 			visible_message("<span class='warning'>[src] collapses in on itself!</span>")
 			qdel(src)
+
+
+/obj/item/organ/internal/stomach 
+	name = "stomach"
+	desc = "extremely treasured body part"
+	icon_state = "butt" //placeholder
+	item_state = "butt" //placeholder
+	zone = "chest"
+	slot = "butt" //I'm not going to mess with this. This works well enough for the code.
+	throwforce = 0
+	throw_speed = 4
+	force = 0
+	hitsound = 'sound/misc/fart.ogg' //Eh, mind as well.
+	body_parts_covered = HEAD //Just going to leave this.
+	slot_flags = SLOT_HEAD // And this.
+	embed_chance = 0 //This is a joke
+	var/loose = 0
+	var/capacity = 2 // this is how much items the butt can hold. 1 means only 1 tiny item, while 2 means 2 tiny items OR 1 small item.
+	var/stored = 0 //how many items are inside
