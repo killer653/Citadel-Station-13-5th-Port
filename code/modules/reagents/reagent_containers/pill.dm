@@ -23,6 +23,74 @@
 
 
 /obj/item/weapon/reagent_containers/pill/attack(mob/M, mob/user, def_zone)
+	if(user.zone_sel.selecting =="mouth" && user.a_intent == "grab")
+		if(ishuman(M))
+			var/mob/living/carbon/human/H = M
+			var/obj/item/organ/internal/stomach/B = H.getorgan(/obj/item/organ/internal/stomach)
+			if(B)
+				if(!H.w_uniform)
+					var/buttspace = B.capacity - B.stored
+					if(!itemstorevalue)
+						switch(w_class)
+							if(1) itemstorevalue += 1 // tiny
+							if(2) itemstorevalue += 2 // small
+							if(3) itemstorevalue += 4 // normal
+							else itemstorevalue += 10 // This may fix this.
+					if(itemstorevalue != -1)//if the item is not too big
+						if(B.stored < B.capacity && itemstorevalue <= buttspace) // if the stomach can still hold an item
+							if(H == user)
+								user.visible_message("<span class='notice'>You stuff \the [src] into your throat.</span>", "<span class='warning'>[user] stuffs \the [src] into their throat.</span>")
+							else
+								H.visible_message("<span class='warning'>[user] attempts to stuff \the [src] inside [H]'s throat...</span>", "<span class='warning'>You attempt to stuff \the [src] down [H]'s throat...</span>")
+								if(!do_mob(user, H))
+									if(H == user)
+										user << "<span class='warning'>You fail to stuff \the [src] into your throat.</span>"
+									else
+										user << "<span class='warning'>You fail to stuff \the [src] into [H]'s throat.</span>"
+									return 0
+								H.visible_message("<span class='danger'>[user] stuffs \the [src] into [H]'s throat.</span>", "<span class='userdanger'>You stuff \the [src] inside [H]'s stomach.</span>")
+							user.unEquip(src)
+							add_logs(user, M, "stuffed", object="[reagentlist(src)]")
+							B.contents += src
+							B.stored += itemstorevalue
+							for(var/i = 1 to reagents.total_volume)
+								if(!(src in B.contents))
+									break
+								sleep(50)
+								reagents.trans_to(M, 1)
+								i++
+							qdel(src)
+							return 1
+						else
+							if(H == user)
+								user << "<span class='warning'>Your stomach is full!</span>"
+							else
+								user << "<span class='warning'>[H]'s stomach is full!</span>"
+							return 0
+					else
+						if(H == user)
+							user << "<span class='warning'>This item is too big to fit in your stomach!</span>"
+						else
+							user << "<span class='warning'>This item is too big to fit in [H]'s stomach!</span>"
+						return 0
+				else
+					if(H == user)
+						user << "<span class='warning'>You'll need to remove your jumpsuit first.</span>"
+					else
+						user << "<span class='warning'>You'll need to remove [H]'s jumpsuit first.</span>"
+						H << "<span class='warning'>You feel your stomach being poked with \the [src]!</span>"
+						user.visible_message("<span class='warning'>[user] pokes [H]'s stomach with \the [src]!</span>", "<span class='warning'>You poke [H]'s stomach with \the [src]!</span>")
+					return 0
+			else
+				if(H == user)
+					user << "<span class='warning'>You have no stomach!</span>"
+				else
+					user << "<span class='warning'>[H] has no stomach!</span>"
+				return 0
+		else
+			user << "<span class='warning'>You can only do that to humans.</span>"
+			return 0
+
 	if(!canconsume(M, user))
 		return 0
 
@@ -52,7 +120,6 @@
 		qdel(src)
 		return 1
 	return 0
-
 
 /obj/item/weapon/reagent_containers/pill/afterattack(obj/target, mob/user , proximity)
 	if(!proximity) return
