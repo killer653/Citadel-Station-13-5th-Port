@@ -30,6 +30,8 @@
 	internal_organs += new /obj/item/organ/internal/appendix
 	internal_organs += new /obj/item/organ/internal/heart
 	internal_organs += new /obj/item/organ/internal/brain
+	internal_organs += new /obj/item/organ/internal/butt
+	internal_organs += new /obj/item/organ/internal/stomach
 
 	for(var/obj/item/organ/internal/I in internal_organs)
 		I.Insert(src)
@@ -48,7 +50,7 @@
 	sec_hud_set_implants()
 	sec_hud_set_security_status()
 	//...and display them.
-	add_to_all_human_data_huds()
+	add_to_all_data_huds()
 
 /mob/living/carbon/human/Destroy()
 	for(var/atom/movable/organelle in organs)
@@ -646,20 +648,20 @@
 					threatcount += 2
 
 	//Check for dresscode violations
-	if(istype(head, /obj/item/clothing/head/wizard) || istype(head, /obj/item/clothing/head/helmet/space/hardsuit/wizard))
-		threatcount += 2
+	if(istype(head, /obj/item/clothing/head/wizard) || istype(head, /obj/item/clothing/head/helmet/space/hardsuit/wizard) || istype(head, /obj/item/clothing/head/helmet/space/syndicate) || istype(head, /obj/item/clothing/head/helmet/space/hardsuit/syndi))
+		threatcount += 6
 
 	//Check for nonhuman scum
-	if(dna && dna.species.id && dna.species.id != "human")
-		threatcount += 1
+//	if(dna && dna.species.id && dna.species.id != "human")
+//		threatcount += 1
 
 	//Loyalty implants imply trustworthyness
 	if(isloyal(src))
-		threatcount -= 1
+		threatcount -= 2
 
 	//Agent cards lower threatlevel.
 	if(istype(idcard, /obj/item/weapon/card/id/syndicate))
-		threatcount -= 5
+		threatcount -= 2
 
 	return threatcount
 
@@ -842,15 +844,3 @@
 			if(M.client)
 				viewing += M.client
 		flick_overlay(image(icon,src,"electrocuted_generic",MOB_LAYER+1), viewing, anim_duration)
-
-/mob/living/carbon/human/canUseTopic(atom/movable/M, be_close = 0)
-	if(incapacitated() || lying )
-		return
-	if(!Adjacent(M))
-		if((be_close == 0) && (dna.check_mutation(TK)))
-			if(tkMaxRangeCheck(src, M))
-				return 1
-		return
-	if(!isturf(M.loc) && M.loc != src)
-		return
-	return 1
