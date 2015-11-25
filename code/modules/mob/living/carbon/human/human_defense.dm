@@ -324,7 +324,7 @@ emp_act
 
 /mob/living/carbon/human/grabbedby(mob/living/user)
 	if(user.zone_sel.selecting == "mouth")
-		var/obj/item/organ/internal/butt/B = src.getorgan(/obj/item/organ/internal/butt)
+		var/obj/item/organ/internal/stomach/B = src.getorgan(/obj/item/organ/internal/stomach)
 		if(!w_uniform)
 			if(B)
 				if(user == src)
