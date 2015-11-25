@@ -191,7 +191,7 @@
 	hitsound = 'sound/misc/fart.ogg' //Eh, mind as well.
 	body_parts_covered = HEAD //Just going to leave this.
 	slot_flags = SLOT_HEAD // And this.
-	embed_chance = 0 //This is a joke
+	embed_chance = 0 
 	var/loose = 0
 	var/capacity = 2 // this is how much items the butt can hold. 1 means only 1 tiny item, while 2 means 2 tiny items OR 1 small item.
 	var/stored = 0 //how many items are inside
