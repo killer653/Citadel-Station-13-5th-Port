@@ -322,6 +322,51 @@ emp_act
 			apply_damage(damage, BRUTE, affecting, armor_block)
 			updatehealth()
 
+/mob/living/carbon/human/grabbedby(mob/living/user)
+	if(user.zone_sel.selecting == "mouth")
+		var/obj/item/organ/internal/butt/B = src.getorgan(/obj/item/organ/internal/butt)
+		if(!w_uniform)
+			if(B)
+				if(user == src)
+					user.visible_message("<span class='warning'>[user] starts reaching down their throat</span>", "<span class='warning'>You start reaching down your throat!</span>")
+				else
+					user.visible_message("<span class='warning'>[user] starts reaching down [src]'s throat!</span>", "<span class='warning'>You start reaching down [src]'s throat!</span>")
+				if(do_mob(user, src, 40))
+					if(B.contents.len)
+						if(user == src)
+							user.visible_message("<span class='warning'>[user] reaches down his own throat!</span>", "<span class='warning'>You reach down into your throat!</span>")
+						else
+							user.visible_message("<span class='warning'>[user] reaches down into [src]'s throat!</span>", "<span class='warning'>You reach down [src]'s throat!</span>")
+						var/obj/item/O = pick(B.contents)
+						O.loc = get_turf(src)
+						B.contents -= O
+						B.stored -= O.itemstorevalue
+						return 0
+					else
+						user.visible_message("<span class='warning'>There's nothing in here!</span>")
+						return 0
+				else
+					if(user == src)
+						user.visible_message("<span class='warning'>[user] fails to reach down his own stomach!</span>", "<span class='warning'>You fail to reach down your stomach!</span>")
+					else
+						user.visible_message("<span class='warning'>[user] fails to reach down [src]'s stomach!</span>", "<span class='warning'>You fail to reach down [src]'s stomach!</span>")
+					return 0
+			else
+				user << "<span class='warning'>There's nothing to reach down into!</span>"
+				return 0
+		else
+			if(user == src)
+				user.visible_message("<span class='warning'>[user] grabs his own stomach!</span>", "<span class='warning'>You grab your own stomach!</span>")
+				user << "<span class='warning'>You'll need to remove your jumpsuit first!</span>"
+			else
+				user.visible_message("<span class='warning'>[user] grabs [src]'s stomach!</span>", "<span class='warning'>You grab [src]'s stomach!</span>")
+				user << "<span class='warning'>You'll need to remove [src]'s jumpsuit first!</span>"
+				src << "<span class='warning'>You feel your stomach being grabbed!</span>"
+			return 0
+	if(w_uniform)
+		w_uniform.add_fingerprint(user)
+	..()
+
 
 /mob/living/carbon/human/attack_slime(mob/living/simple_animal/slime/M)
 	if(..()) //successful slime attack
@@ -395,3 +440,4 @@ emp_act
 					skipcatch = 1 //can't catch the now embedded item
 
 	return ..()
+	
