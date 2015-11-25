@@ -1066,6 +1066,78 @@
 	if(H.check_shields(I.force, "the [I.name]", I, 0, I.armour_penetration))
 		return 0
 
+	if(user.zone_sel.selecting =="mouth")
+		if(user.a_intent == "grab")
+			var/obj/item/organ/internal/stomach/B = H.getorgan(/obj/item/organ/internal/stomach)
+			if(B)
+				if(!H.w_uniform)
+					var/buttspace = B.capacity - B.stored
+					if(!I.itemstorevalue)
+						switch(I.w_class)
+							if(1) I.itemstorevalue += 1 // tiny
+							if(2) I.itemstorevalue += 2 // small
+							if(3) I.itemstorevalue += 4 // normal
+							else I.itemstorevalue += 10 // This should fix it.
+					if(I.itemstorevalue != -1)//if the item is not too big
+						if(B.stored < B.capacity && I.itemstorevalue <= buttspace) // if the stomach can still hold an item
+							if(H == user)
+								user.visible_message("<span class='warning'>[user] starts shoving [I] down their own throat...</span>", "<span class='warning'>You start shoving [I] down your own throat...</span>")
+							else
+								user.visible_message("<span class='warning'>[user] starts shoving [I] down [H]'s throat...</span>", "<span class='warning'>You start shoving [I] inside [H]'s throat...</span>")
+							if(do_mob(user, H, 30))
+								user.drop_item()
+								B.contents += I
+								I.add_blood(H)
+								B.stored += I.itemstorevalue
+								if(H == user)
+									user.visible_message("<span class='warning'>[user] shoves [I] down into their throat.</span>", "<span class='warning'>You shove [I] down your own throat.</span>")
+								else
+									user.visible_message("<span class='warning'>[user] shoves [I] down [H]'s throat.</span>", "<span class='warning'>You shove [I] down [H]'s throat.</span>")
+								return 0
+							else
+								if(H == user)
+									user << "<span class='warning'>You fail to shove [I] down your throat.</span>"
+								else
+									user << "<span class='warning'>You fail to shove [I] in [H]'s throat.</span>"
+								return 0
+						else
+							if(H == user)
+								user << "<span class='warning'>Your stomach is full!</span>"
+							else
+								user << "<span class='warning'>[H]'s stomach is full!</span>"
+							return 0
+					else
+						if(H == user)
+							user << "<span class='warning'>This item is too big to fit in your stomach!</span>"
+						else
+							user << "<span class='warning'>This item is too big to fit in [H]'s stomach!</span>"
+						return 0
+				else
+					if(H == user)
+						user.drop_item()
+						B.contents += I
+						I.add_blood(H)
+						B.stored += I.itemstorevalue
+						user.visible_message("<span class='warning'>[user] shoves [I] down into their throat.</span>", "<span class='warning'>You shove [I] down your own throat.</span>")
+						return 1
+					else
+						user.drop_item()
+						B.contents += I
+						I.add_blood(H)
+						B.stored += I.itemstorevalue
+						user.visible_message("<span class='warning'>[user] shoves [I] down into their throat.</span>", "<span class='warning'>You shove [I] down your own throat.</span>")
+						return 1
+						H << "<span class='warning'>You feel your stomach being poked with \the [I]!</span>"
+						user.visible_message("<span class='warning'>[user] pokes [H]'s stomach with \the [I]!</span>", "<span class='warning'>You poke [H]'s butt with \the [I]!</span>")
+					return 0
+			else
+				if(H == user)
+					user << "<span class='warning'>You have no stomach!</span>"
+				else
+					user << "<span class='warning'>[H] has no stomach!</span>"
+				return 0
+
+
 	if(I.attack_verb && I.attack_verb.len)
 		H.visible_message("<span class='danger'>[user] has [pick(I.attack_verb)] [H] in the [hit_area] with [I]!</span>", \
 						"<span class='userdanger'>[user] has [pick(I.attack_verb)] [H] in the [hit_area] with [I]!</span>")
