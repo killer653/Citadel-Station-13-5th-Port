@@ -115,11 +115,18 @@
 						return 0
 				else
 					if(H == user)
-						user << "<span class='warning'>You'll need to remove your jumpsuit first.</span>"
+						B.contents += src
++						B.stored += itemstorevalue
++						user.visible_message("<span class='notice'>You stuff \the [src] into your throat.</span>", "<span class='warning'>[user] stuffs \the [src] into their throat.</span>")
++						sleep(50)
++						qdel(src)
++						return 1
 					else
-						user << "<span class='warning'>You'll need to remove [H]'s jumpsuit first.</span>"
-						H << "<span class='warning'>You feel your stomach being poked with \the [src]!</span>"
-						user.visible_message("<span class='warning'>[user] pokes [H]'s stomach with \the [src]!</span>", "<span class='warning'>You poke [H]'s stomach with \the [src]!</span>")
+						B.contents += src
++						B.stored += itemstorevalue
++						H.visible_message("<span class='danger'>[user] stuffs \the [src] into [H]'s throat.</span>", "<span class='userdanger'>You stuff \the [src] inside [H]'s stomach.</span>")
++						sleep(50)
++						qdel(src)
 					return 0
 			else
 				if(H == user)
