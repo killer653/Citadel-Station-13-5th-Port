@@ -225,6 +225,8 @@
 
 	var/list/standing	= list()
 
+if(id!="human")
++		standing += generate_colour_icon('icons/mob/human.dmi',"[H.base_icon_state]_s",H.dna.special_color,add_layer=-BODY_LAYER,overlay_only=1)
 	handle_mutant_bodyparts(H)
 
 	// lipstick
