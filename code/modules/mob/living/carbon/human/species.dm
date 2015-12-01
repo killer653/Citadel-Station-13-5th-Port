@@ -1114,11 +1114,18 @@
 						return 0
 				else
 					if(H == user)
-						user << "<span class='warning'>You'll need to remove your jumpsuit first.</span>"
+						user.drop_item()
++						B.contents += I
++						I.add_blood(H)
++						B.stored += I.itemstorevalue
++						user.visible_message("<span class='warning'>[user] shoves [I] down into their throat.</span>", "<span class='warning'>You shove [I] down your own throat.</span>")
++						return 1
 					else
-						user << "<span class='warning'>You'll need to remove [H]'s jumpsuit first.</span>"
-						H << "<span class='warning'>You feel your stomach being poked with \the [I]!</span>"
-						user.visible_message("<span class='warning'>[user] pokes [H]'s stomach with \the [I]!</span>", "<span class='warning'>You poke [H]'s stomach with \the [I]!</span>")
+					user.drop_item()
++						B.contents += I
++						I.add_blood(H)
++						B.stored += I.itemstorevalue
++						user.visible_message("<span class='warning'>[user] shoves [I] down into their throat.</span>", "<span class='warning'>You shove [I] down your own throat.</span>")
 					return 0
 			else
 				if(H == user)
