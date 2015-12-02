@@ -116,17 +116,17 @@
 				else
 					if(H == user)
 						B.contents += src
-+						B.stored += itemstorevalue
-+						user.visible_message("<span class='notice'>You stuff \the [src] into your throat.</span>", "<span class='warning'>[user] stuffs \the [src] into their throat.</span>")
-+						sleep(50)
-+						qdel(src)
-+						return 1
+						B.stored += itemstorevalue
+						user.visible_message("<span class='notice'>You stuff \the [src] into your throat.</span>", "<span class='warning'>[user] stuffs \the [src] into their throat.</span>")
+						sleep(50)
+						qdel(src)
+						return 1
 					else
 						B.contents += src
-+						B.stored += itemstorevalue
-+						H.visible_message("<span class='danger'>[user] stuffs \the [src] into [H]'s throat.</span>", "<span class='userdanger'>You stuff \the [src] inside [H]'s stomach.</span>")
-+						sleep(50)
-+						qdel(src)
+						B.stored += itemstorevalue
+						H.visible_message("<span class='danger'>[user] stuffs \the [src] into [H]'s throat.</span>", "<span class='userdanger'>You stuff \the [src] inside [H]'s stomach.</span>")
+						sleep(50)
+						qdel(src)
 					return 0
 			else
 				if(H == user)
